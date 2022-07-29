@@ -38,7 +38,7 @@ namespace GLS_BlazorMVC_PoC.Controllers
         public async Task<IActionResult> Login(UserDto userDTO)
         {
             User user = _mapper.Map<User>(userDTO);
-            var checkDbUser = _context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
+            var checkDbUser = _context.Users.Where(x => x.Email == user.Email || x.Username == user.Email).FirstOrDefault();
             if (checkDbUser == null)
             {
                 ModelState.AddModelError("UserError", "Email not found!");
@@ -51,7 +51,7 @@ namespace GLS_BlazorMVC_PoC.Controllers
             }
             var claims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.Name, user.Email)
+                            new Claim(ClaimTypes.Name, checkDbUser.Email)
                         };
 
             var claimsIdentity = new ClaimsIdentity(
