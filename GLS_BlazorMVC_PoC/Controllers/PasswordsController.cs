@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GLS_BlazorMVC_PoC.Data;
 using GLS_BlazorMVC_PoC.Models;
 using Microsoft.AspNetCore.Authorization;
+using GLS_BlazorMVC_PoC.FluentValidators;
 
 namespace GLS_BlazorMVC_PoC.Controllers
 {
@@ -67,6 +68,15 @@ namespace GLS_BlazorMVC_PoC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ServiceName,EncryptedPassword,UserId")] Password password)
         {
+            PasswordValidator passValidation = new PasswordValidator();
+            FluentValidation.Results.ValidationResult validationResult = passValidation.Validate(password);
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError("UserError", error.ErrorMessage);
+                }
+            }
             password.UserId = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().Id;
             password.EncryptedPassword = Helpers.Encryptor.Encrypt(password.EncryptedPassword);
             ModelState.Remove("User");
@@ -117,6 +127,15 @@ namespace GLS_BlazorMVC_PoC.Controllers
             if (id != password.Id)
             {
                 return NotFound();
+            }
+            PasswordValidator passValidation = new PasswordValidator();
+            FluentValidation.Results.ValidationResult validationResult = passValidation.Validate(password);
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError("UserError", error.ErrorMessage);
+                }
             }
 
             password.UserId = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().Id;

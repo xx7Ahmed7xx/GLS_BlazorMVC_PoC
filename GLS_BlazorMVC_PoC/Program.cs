@@ -22,6 +22,7 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 var app = builder.Build();
 

@@ -1,9 +1,8 @@
-﻿using GLS_BlazorMVC_PoC.Data;
-using GLS_BlazorMVC_PoC.Models;
+﻿using AutoMapper;
+using GLS_BlazorMVC_PoC.Data;
 using GLS_BlazorMVC_PoC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -14,11 +13,13 @@ namespace GLS_BlazorMVC_PoC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly MyDbContext _context;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, MyDbContext context)
+        public HomeController(ILogger<HomeController> logger, MyDbContext context, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -34,8 +35,9 @@ namespace GLS_BlazorMVC_PoC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(User user)
+        public async Task<IActionResult> Login(UserDto userDTO)
         {
+            User user = _mapper.Map<User>(userDTO);
             var checkDbUser = _context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
             if (checkDbUser == null)
             {
@@ -85,8 +87,9 @@ namespace GLS_BlazorMVC_PoC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register(UserDto userDTO)
         {
+            User user = _mapper.Map<User>(userDTO);
             var checkDbUser = _context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
             if (checkDbUser != null)
             {
