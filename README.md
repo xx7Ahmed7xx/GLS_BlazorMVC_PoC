@@ -1,7 +1,7 @@
 # GLS_BlazorMVC_PoC
 Repository for making the Password Manager assessment
 ## Technologies
-Blazor & MVC, .NET 6, MS SQL Server, Serilog, AutoMapper and FluentValidation, Authentication and Authorization, My own Custom Hasher/Encryptor Library.
+Blazor & MVC, .NET 6, MS SQL Server, Serilog, AutoMapper and FluentValidation, Cookies' Authentication and Authorization, My own Custom Hasher/Encryptor Library.
 ## Explaining
 This project aims to provide a mean of maintaing passwords related to specific users by CRUD operations.
 It should be easy and straight-forward to use it.
