@@ -1,4 +1,5 @@
-﻿using GLS_BlazorMVC_PoC.Models;
+﻿
+using GLS_BlazorMVC_PoC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GLS_BlazorMVC_PoC.Data
